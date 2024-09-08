@@ -4,9 +4,10 @@ import Button from "../../components/Button";
 import { clearCart, getCart, getTotalCartPrice } from "../cart/cartSlice";
 import EmptyCart from "../cart/EmptyCart";
 import store from "../../store/store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { formatCurrency } from "../../utils/helpers";
 import { useState } from "react";
+import { fetchAddress } from "../user/userSlice";
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
@@ -16,10 +17,11 @@ const isValidPhone = (str) =>
 
 function CreateOrder() {
   const [withPriority, setWithPriority] = useState(false);
-  //useSelector values from redux
+  //useSelector & dispatch from redux
   const username = useSelector((state) => state.user.username);
   const cart = useSelector(getCart);
   const totalCartPrice = useSelector(getTotalCartPrice);
+  const dispatch = useDispatch();
   //dervied values from state
   const priorityPrice = withPriority ? totalCartPrice * 0.2 : 0;
   const totalPrice = totalCartPrice + priorityPrice;
@@ -33,6 +35,8 @@ function CreateOrder() {
   return (
     <div className="px-4 py-6">
       <h2 className="mb-8 text-xl font-semibold">Ready to order? Lets go!</h2>
+
+      <button onClick={() => dispatch(fetchAddress())}>Get position</button>
 
       {/* Form provided by react router */}
       {/* <Form method="POST" action="/order/new"> */}
